@@ -1,22 +1,18 @@
 import { List } from 'antd'
-import { ITodo } from '../types/data'
+import { useAppSelector } from '../hook/hook.ts'
 import { TodoItem } from './TodoItem'
 import style from './TodoList.module.scss'
 
-interface ITodoListProps {
-	items: ITodo[]
-	toggleTodo: (id: number) => void
-	removeTodo: (id: number) => void
-}
+export const TodoList: React.FC = () => {
+	const todos = useAppSelector(state => state.todos.list)
 
-export const TodoList: React.FC<ITodoListProps> = props => {
 	return (
 		<div className={style.container}>
 			<List
-				dataSource={props.items}
+				dataSource={todos}
 				renderItem={item => (
 					<List.Item>
-						<TodoItem key={item.id} {...item} {...props} />
+						<TodoItem key={item.id} {...item} />
 					</List.Item>
 				)}
 			/>

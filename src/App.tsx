@@ -1,49 +1,30 @@
 import style from './App.module.scss'
-import { Input, Button, Layout, Typography } from 'antd'
+import { Layout, Typography } from 'antd'
 import { TodoList } from './components/TodoList'
-import { useTodo } from './useTodo'
+import { NewTodoForm } from './components/NewTodoForm'
+import { useAppDispatch } from './hook/hook.ts'
+import { useState } from 'react'
+import { addTodo } from './features/todoSlice.ts'
 
 export const App: React.FC = () => {
 	const { Content } = Layout
 	const { Title } = Typography
+	const [text, setText] = useState('')
+	const dispatch = useAppDispatch()
 
-	const {
-		value,
-		handleChange,
-		handleKeydown,
-		inputRef,
-		addTodo,
-		todos,
-		removeTodo,
-		toggleTodo,
-	} = useTodo()
+	const handleAction = () => {
+		if (text.trim().length) {
+			dispatch(addTodo(text))
+			setText('')
+		}
+	}
 
 	return (
 		<Layout className={style.box}>
 			<Content className={style.content}>
 				<Title style={{ textAlign: 'center' }}>Todo list</Title>
-				<div className={style.inputbox}>
-					<Input
-						className={style.inputbox__input}
-						value={value}
-						onChange={handleChange}
-						ref={inputRef}
-						onKeyDown={handleKeydown}
-					></Input>
-					<Button
-						className={style.inputbox__btn}
-						type='primary'
-						onClick={addTodo}
-					>
-						Ввод
-					</Button>
-				</div>
-
-				<TodoList
-					items={todos}
-					removeTodo={removeTodo}
-					toggleTodo={toggleTodo}
-				></TodoList>
+				<NewTodoForm handleAction={handleAction} value={text} updateText={setText}/>
+				<TodoList />
 			</Content>
 		</Layout>
 	)

@@ -1,30 +1,36 @@
-import { ITodo } from '../types/data'
+import { useAppDispatch } from '../hook/hook'
 import { DeleteOutlined } from '@ant-design/icons'
 import { Checkbox, Button, Space } from 'antd'
 import style from './TodoItem.module.scss'
+import { removeTodo, toggleComplete } from '../features/todoSlice'
 
-interface ITodoItem extends ITodo {
-	removeTodo: (id: number) => void
-	toggleTodo: (id: number) => void
+interface ITodoItemProps {
+	id: string
+	title: string
+	completed: boolean
 }
 
-export const TodoItem: React.FC<ITodoItem> = props => {
-	const { id, title, completed, removeTodo, toggleTodo } = props
+export const TodoItem: React.FC<ITodoItemProps> = ({
+	id,
+	title,
+	completed,
+}) => {
+	const dispatch = useAppDispatch()
 
 	return (
 		<div className={`${style.container}`}>
 			<Space size='large'>
 				<Checkbox
 					className={style.checkbox}
-					id={id.toString()}
+					id={id}
 					checked={completed}
-					onChange={() => toggleTodo(id)}
+					onChange={() => dispatch(toggleComplete(id))}
 				/>
 				<label htmlFor={id.toString()} className={style.label}>
 					{title}
 				</label>
 			</Space>
-			<Button type='primary' danger onClick={() => removeTodo(id)}>
+			<Button type='primary' danger onClick={() => dispatch(removeTodo(id))}>
 				<DeleteOutlined />
 			</Button>
 		</div>

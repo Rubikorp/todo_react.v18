@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export interface ITodo {
+type TTodo = {
 	id: string
 	title: string
 	completed: boolean
 }
 
-interface ITodoState {
-	list: ITodo[]
+type TTodoState = {
+	list: TTodo[]
 }
 
-const initialState: ITodoState = {
+const initialState: TTodoState = {
 	list: [],
 }
 
@@ -19,10 +19,10 @@ const todoSlice = createSlice({
 	name: 'todos',
 	initialState,
 	reducers: {
-		addTodo(state, action: PayloadAction<ITodo>) {
+		addTodo(state, action: PayloadAction<string>) {
 			state.list.push({
 				id: Date.now().toString(),
-				title: action.payload.title,
+				title: action.payload,
 				completed: false,
 			})
 		},
